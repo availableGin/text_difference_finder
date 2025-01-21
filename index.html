@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Input Example</title>
+    <style>
+        .bold-italic {
+          font-weight: bold;
+          font-style: italic;
+        }
+        .deleted {
+          color: red;
+          text-decoration: line-through;
+        }
+        .added {
+          color: blue;
+        }
+
+        /* 增加输入框的宽度 */
+        textarea {
+            width: 500px; /* 设置输入框宽度为500px */
+            height: 50px; /* 设置高度为100px，你可以根据需要调整 */
+            resize: both; /* 允许手动调整输入框的大小 */
+            overflow: auto; /* 超出部分可滚动 */
+            white-space: pre-wrap; /* 保证文本自动换行 */
+        }
+
+        /* 增加按钮样式，使OK按钮更大 */
+        button {
+            padding: 10px 20px; /* 增大按钮的内边距 */
+            font-size: 16px; /* 增大按钮的字体 */
+            margin: 5px; /* 按钮间的间隔 */
+        }
+
+        /* 清空按钮 */
+        #clearButton {
+            background-color: #f44336; /* 红色背景 */
+            color: white; /* 白色文字 */
+        }
+
+        #okButton {
+            background-color: #4CAF50; /* 绿色背景 */
+            color: white; /* 白色文字 */
+        }
+
+        #threeButton {
+            background-color: #45BA89; /* 不同颜色背景 */
+            color: white; /* 白色文字 */
+        }
+
+    </style>
+</head>
+<body>
+
+    <a href="/indexOri.html">Nginx welcome</a><br>
+    <a href="https://github.com/ykdojo/text_difference_finder">text_difference_finder
+</a>on html- GPT generated
+    <br>
+    <!-- Text inputs for dynamic data -->
+    <label for="input0">Text 1:</label>
+    <textarea id="input0"></textarea><br><br>
+    
+    <label for="input1">Text 2:</label>
+    <textarea id="input1"></textarea><br><br>
+    
+    <label for="input2">Text 3:</label>
+    <textarea id="input2"></textarea><br><br>
+    
+    <label for="input3">splitByWords:</label>
+    <!-- <input type="checkbox" id="input3" checked disabled><br><br> -->
+    <input type="checkbox" id="input3" checked disabled><br><br>
+    
+    <!-- OK button to trigger output -->
+    <button id="okButton" onclick="generateResult()">Start</button>
+
+    <button id="threeButton" onclick="generate3Results()">threeParagraph</button>
+
+    <button id="clearButton" onclick="clearInputs()">Clear</button>
+
+    <h3>Output:</h3>
+    <div id="results"></div>
+
+    <script src="text_difference.js"></script>
+    <script>
+        function generateResult() {
+            // 在生成新结果之前清空之前的结果
+            //document.getElementById("results").innerHTML = "";
+            // Get input values
+            const input0 = document.getElementById('input0').value;
+            const input1 = document.getElementById('input1').value;
+            const input2 = "A"; // Fixed value for item 2
+            const input3 = true; // Fixed value for item 3 (checkbox is always true)
+
+            // Define the testSet array
+            const testSets = [
+                [input0, input1, input2, input3]
+            ];
+
+            // Loop through testSets and display the result
+            testSets.forEach(function(testSet) {
+                
+                document.getElementById("results").innerHTML = 
+                    showTextDiffResult(testSet[0], testSet[1], testSet[2], testSet[3]);
+                    
+            });
+        }
+
+        function generate3Results() {
+            // 在生成新结果之前清空之前的结果
+            //document.getElementById("results").innerHTML = "";
+            // Get input values
+            const input0 = document.getElementById('input0').value;
+            const input1 = document.getElementById('input1').value;
+            const input2 = document.getElementById('input2').value;
+            const input3 = true; // Fixed value for item 3 (checkbox is always true)
+
+            // Define the testSet array
+            const testSets = [
+                [input0, input1, input2, input3]
+            ];
+
+            // Loop through testSets and display the result
+            testSets.forEach(function(testSet) {
+                
+                //document.getElementById("results").innerHTML = 
+                //    showTextDiffResult(testSet[0], testSet[1], 'A', testSet[3]);
+                let resultHtml = '';
+                resultHtml += showTextDiffResult(testSet[0], testSet[1], 'A', testSet[3]);
+                resultHtml += "<br>";
+                resultHtml += showTextDiffResult(testSet[0], testSet[2], 'A', testSet[3]);
+
+                document.getElementById("results").innerHTML = resultHtml;
+                    
+            });
+
+  
+        }
+
+        function cutText(){
+            // 用于备注
+            // 将输入0按{R1:}分割为两段文本
+            const parts = input0.split("{R1:}");
+
+            if (parts.length === 2) {
+                // 如果分割成功，取出分割后的两个部分
+                const text1 = parts[0].trim();
+                const text2 = parts[1].trim();
+
+        }
+
+        function showTextDiffResult(original, edited, expected, splitByWords) {
+            let textDiffResult = textDiff(original, edited, splitByWords);
+            let result = `
+            <p>
+                <!-- <div><span class='bold-italic'>Original text: </span>${original}</div> -->
+                <!-- <div><span class='bold-italic'>Edited text: </span>${edited}</div> -->
+                <!-- <div><span class='bold-italic'>Expected result: </span>${expected}</div> -->
+                <!-- <div><span class='bold-italic'>Actual result: </span>${textDiffResult.lcs}</div> -->
+                <div><span class='bold-italic'>Deleted: </span>${textDiffResult.deleted}</div>
+                <div><span class='bold-italic'>Added: </span>${textDiffResult.added}</div>
+            </p>`;
+            return result;
+        }
+
+        /*function textDiff(original, edited, splitByWords) {
+            // Implement a basic text diff algorithm here, or use an existing one
+            // For now, just return an example object
+            return {
+                lcs: "Longest Common Subsequence Result",
+                deleted: "Deleted Content",
+                added: "Added Content"
+            };
+        }*/
+        // 清空输入框0和输入框1的值
+        function clearInputs() {
+            document.getElementById('input0').value = '';
+            document.getElementById('input1').value = '';
+            document.getElementById('input2').value = '';
+            document.getElementById("results").innerHTML = "";
+        }
+    </script>
+
+</body>
+</html>

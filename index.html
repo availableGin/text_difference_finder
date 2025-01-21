@@ -60,6 +60,11 @@
             color: white; /* 白色文字 */
         }
 
+        #oneButton {
+            background-color: #4523BA; /* 不同颜色背景 */
+            color: white; /* 白色文字 */
+        }
+
     </style>
 </head>
 <body>
@@ -86,7 +91,9 @@
     <!-- OK button to trigger output -->
     <button id="okButton" onclick="generateResult()">Start</button>
 
-    <button id="threeButton" onclick="generate3Results()">threeParagraph</button>
+    <button id="threeButton" onclick="generate3Results()">threeParagraphs</button>
+
+    <button id="oneButton" onclick="splitResult()">oneParagraph</button>
 
     <button id="clearButton" onclick="clearInputs()">Clear</button>
 
@@ -102,7 +109,7 @@
             const input0 = document.getElementById('input0').value;
             const input1 = document.getElementById('input1').value;
             const input2 = "A"; // Fixed value for item 2
-            const input3 = true; // Fixed value for item 3 (checkbox is always true)
+            const input3 = document.getElementById('input3'); // Fixed value for item 3 (checkbox is always true)
 
             // Define the testSet array
             const testSets = [
@@ -125,7 +132,7 @@
             const input0 = document.getElementById('input0').value;
             const input1 = document.getElementById('input1').value;
             const input2 = document.getElementById('input2').value;
-            const input3 = true; // Fixed value for item 3 (checkbox is always true)
+            const input3 = document.getElementById('input3'); // Fixed value for item 3 (checkbox is always true)
 
             // Define the testSet array
             const testSets = [
@@ -138,6 +145,8 @@
                 //document.getElementById("results").innerHTML = 
                 //    showTextDiffResult(testSet[0], testSet[1], 'A', testSet[3]);
                 let resultHtml = '';
+
+
                 resultHtml += showTextDiffResult(testSet[0], testSet[1], 'A', testSet[3]);
                 resultHtml += "<br>";
                 resultHtml += showTextDiffResult(testSet[0], testSet[2], 'A', testSet[3]);
@@ -149,17 +158,48 @@
   
         }
 
-        /*function cutText(){
-            // 用于备注
-            // 将输入0按{换行符 R1:}分割为两段文本
-            const parts = input0.split("{换行符 R1:}");
-
-            if (parts.length === 2) {
+        function splitResult(){
+            
+            let text0, text1, text2;
+            // 将输入0按{换行符}分割为两段文本
+            const input0 = document.getElementById('input0').value;            
+            const input3 = document.getElementById('input3');
+            const parts = input0.split("\n");
+            if (parts.length >= 3) {
                 // 如果分割成功，取出分割后的两个部分
-                const text1 = parts[0].trim();
-                const text2 = parts[1].trim();
+                text0 = parts[0].trim();
+                text1 = parts[1].trim();
+                text2 = parts[2].trim();
+                document.getElementById('input0').value = text0;
+                document.getElementById('input1').value = text1;
+                document.getElementById('input2').value = text2;
+            }   else    {
+                text0 = parts[0].trim();
+                text1 = parts[0].trim();
+                text2 = parts[0].trim();
+            }
 
-        }*/
+            const testSets = [
+                [text0, text1, text2, input3]
+            ];
+
+            // Loop through testSets and display the result
+            testSets.forEach(function(testSet) {
+                
+                //document.getElementById("results").innerHTML = 
+                //    showTextDiffResult(testSet[0], testSet[1], 'A', testSet[3]);
+                let resultHtml = '';
+
+
+                resultHtml += showTextDiffResult(testSet[0], testSet[1], 'A', testSet[3]);
+                resultHtml += "<br>";
+                resultHtml += showTextDiffResult(testSet[0], testSet[2], 'A', testSet[3]);
+
+                document.getElementById("results").innerHTML = resultHtml;
+                    
+            });
+
+        }
 
         function showTextDiffResult(original, edited, expected, splitByWords) {
             let textDiffResult = textDiff(original, edited, splitByWords);

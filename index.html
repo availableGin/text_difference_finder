@@ -19,7 +19,7 @@
 
         /* 增加输入框的宽度 */
         textarea {
-            width: 500px; /* 设置输入框宽度为500px */
+            width: 500px; /* 设置输入框宽度为300px */
             height: 50px; /* 设置高度为100px，你可以根据需要调整 */
             resize: both; /* 允许手动调整输入框的大小 */
             overflow: auto; /* 超出部分可滚动 */
@@ -54,22 +54,23 @@
 <body>
 
     <a href="/indexOri.html">Nginx welcome</a><br>
-    <a href="https://github.com/ykdojo/text_difference_finder">text_difference_finder
-</a>on html- GPT generated
+    <a href="https://github.com/availableGin/text_difference_finder">text_difference_finder
+    </a>on html- GPT generated
+    
     <br>
     <!-- Text inputs for dynamic data -->
     <label for="input0">Text 1:</label>
-    <textarea id="input0"></textarea><br><br>
+    <textarea id="input0">hello world!</textarea><br><br>
     
     <label for="input1">Text 2:</label>
-    <textarea id="input1"></textarea><br><br>
+    <textarea id="input1">hello</textarea><br><br>
     
     <label for="input2">Text 3:</label>
-    <textarea id="input2"></textarea><br><br>
+    <textarea id="input2">world!</textarea><br><br>
     
     <label for="input3">splitByWords:</label>
     <!-- <input type="checkbox" id="input3" checked disabled><br><br> -->
-    <input type="checkbox" id="input3" checked disabled><br><br>
+    <input type="checkbox" id="input3" checked><br><br>
     
     <!-- OK button to trigger output -->
     <button id="okButton" onclick="generateResult()">Start</button>
@@ -137,17 +138,17 @@
   
         }
 
-        function cutText(){
+        /*function cutText(){
             // 用于备注
-            // 将输入0按{R1:}分割为两段文本
-            const parts = input0.split("{R1:}");
+            // 将输入0按{换行符 R1:}分割为两段文本
+            const parts = input0.split("{换行符 R1:}");
 
             if (parts.length === 2) {
                 // 如果分割成功，取出分割后的两个部分
                 const text1 = parts[0].trim();
                 const text2 = parts[1].trim();
 
-        }
+        }*/
 
         function showTextDiffResult(original, edited, expected, splitByWords) {
             let textDiffResult = textDiff(original, edited, splitByWords);

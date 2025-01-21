@@ -164,7 +164,8 @@
             // 将输入0按{换行符}分割为两段文本
             const input0 = document.getElementById('input0').value;            
             const input3 = document.getElementById('input3');
-            const parts = input0.split("\n");
+            //const parts = input0.split("\n");
+            const parts = input0.split("\n").filter(line => line.trim() !== ""); // 去除空行
             if (parts.length >= 3) {
                 // 如果分割成功，取出分割后的两个部分
                 text0 = parts[0].trim();
